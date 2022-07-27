@@ -198,15 +198,15 @@ public class Libro extends javax.swing.JFrame {
         encabezado[2]="Año";
         encabezado[3]="Categoria";
         
-        var datos = new Object[this.LibroControl.listar().size()][4];
+        var datos = new Object[this.libroControl.listar().size()][4];
         
         var i=0;
-        for(var auto:this.libroControl.listar())
+        for(var libro:this.libroControl.listar())
         {
-            datos[i][0]=auto.getPlaca();
-            datos[i][1]=auto.getCodigo();
-            datos[i][2]=auto.getYear();
-            datos[i][3]=auto.getPrecio();
+            datos[i][0]= libro.getCodigo();
+            datos[i][1]= libro.getNombre();
+            datos[i][2]= libro.getYear();
+            datos[i][3]= libro.getCategoria();
             
             i++;
         }
