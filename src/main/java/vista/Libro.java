@@ -5,6 +5,10 @@
  */
 package vista;
 
+import controlador.LibroControl;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 /**
  *
  * @author usuario
@@ -39,7 +43,7 @@ public class Libro extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         CbxCategoria = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        CbxCa = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,10 +90,10 @@ public class Libro extends javax.swing.JFrame {
 
         CbxCategoria.setText("Ingrese la categoria");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione la categoria" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        CbxCa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione la categoria" }));
+        CbxCa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                CbxCaActionPerformed(evt);
             }
         });
 
@@ -118,7 +122,7 @@ public class Libro extends javax.swing.JFrame {
                                         .addGap(11, 11, 11)
                                         .addComponent(jButton2))
                                     .addComponent(TxtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(CbxCa, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(86, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -139,7 +143,7 @@ public class Libro extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CbxCategoria)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CbxCa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -175,24 +179,49 @@ public class Libro extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String [] args = new String[3];
+        String [] args = new String[4];
         args[0]=this.TxtCodigo.getText();
         args[1]=this.TxtNombre.getText();
         args[2]=this.CxbAño.getSelectedItem().toString();
-        args[3]=this.CbxCategoria.getSelectedItem().toString();
+        args[3]=this.CbxCa.getSelectedItem().toString();
+        
         this.libroControl.crear(args);
         this.actualizarTabla();
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    private void actualizarTabla()
+    {
+        String [] encabezado = new String[4];
+        encabezado[0]="Codigo";
+        encabezado[1]="Nombre";
+        encabezado[2]="Año";
+        encabezado[3]="Categoria";
+        
+        var datos = new Object[this.LibroControl.listar().size()][4];
+        
+        var i=0;
+        for(var auto:this.libroControl.listar())
+        {
+            datos[i][0]=auto.getPlaca();
+            datos[i][1]=auto.getCodigo();
+            datos[i][2]=auto.getYear();
+            datos[i][3]=auto.getPrecio();
+            
+            i++;
+        }
+        this.modeloTabla = new DefaultTableModel(datos,encabezado);
+        this.jTable1.setModel(modeloTabla);
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         this.actualizarTabla();
         System.out.println(this.libroControl.listar().toString());
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void CbxCaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CbxCaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_CbxCaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -228,8 +257,12 @@ public class Libro extends javax.swing.JFrame {
             }
         });
     }
+    
+    private LibroControl libroControl = new LibroControl();
+    private TableModel modeloTabla;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> CbxCa;
     private javax.swing.JLabel CbxCategoria;
     private javax.swing.JComboBox<String> CxbAño;
     private javax.swing.JTextField TxtCodigo;
@@ -237,7 +270,6 @@ public class Libro extends javax.swing.JFrame {
     private javax.swing.JTextField TxtPrecio;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
